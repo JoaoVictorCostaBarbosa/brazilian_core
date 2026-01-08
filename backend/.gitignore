@@ -1,0 +1,46 @@
+# Ambientes Virtuais
+.venv/
+venv/
+
+# Arquivos de Cache e Bytecode Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos de Configuração e Segredos
+.env
+.env.*
+*.env
+.secrets/
+!.env.example
+
+# Arquivos de IDE e Editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs e Banco de Dados Temporários
+*.log
+*.sqlite3
+*.db
+
+# Dependências de Teste (se geradas)
+.pytest_cache/
+.coverage
+
+# Arquivos do Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Build e Distribuição
+dist/
+build/
+*.egg-info/
+
+# FastAPI Cloud (se usado para ignorar/incluir)
+# .fastapicloudignore
+
+# Arquivos de Debug
+.pydb
