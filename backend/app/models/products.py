@@ -11,6 +11,7 @@ class Product:
         price: Decimal,
         description: str,
         stock_quantity: int,
+        url_img: str,
         id: Optional[uuid.UUID],
     ) -> None:
         self.id = id or uuid.uuid4()
@@ -18,3 +19,4 @@ class Product:
         self.price = (price * 10) / 10
         self.description = description
         self.stock_quantity = stock_quantity
+        self.url_img = url_img

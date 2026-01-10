@@ -11,6 +11,7 @@ class ProductResponse(BaseModel):
     price: Decimal
     description: str
     stock_quantity: int
+    url_img: str
 
 
 def to_product_reponse(data: Product) -> ProductResponse:
@@ -20,4 +21,5 @@ def to_product_reponse(data: Product) -> ProductResponse:
         price=data.price,
         description=data.description,
         stock_quantity=data.stock_quantity,
+        url_img=data.url_img,
     )

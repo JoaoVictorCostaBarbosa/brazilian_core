@@ -17,7 +17,8 @@ class ProductRepository:
               name,
               price,
               description,
-              stock_quantity
+              stock_quantity,
+              url_img
             FROM products
         """
 
@@ -40,7 +41,8 @@ class ProductRepository:
               name,
               price,
               description,
-              stock_quantity
+              stock_quantity,
+              url_img
             FROM products
             WHERE id = %s
         """
@@ -67,7 +69,8 @@ class ProductRepository:
               name,
               price,
               description,
-              stock_quantity
+              stock_quantity,
+              url_img
             FROM products
             WHERE price <= %s
         """
@@ -81,11 +84,12 @@ class ProductRepository:
             cursor.close()
             conn.close()
 
-    def _row_to_product(self, row: Tuple[str, str, Decimal, str, int]) -> Product:
+    def _row_to_product(self, row: Tuple[str, str, Decimal, str, int, str]) -> Product:
         return Product(
             id=uuid.UUID(row[0]),
             name=row[1],
             price=row[2],
             description=row[3],
             stock_quantity=row[4],
+            url_img=row[5],
         )
