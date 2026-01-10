@@ -16,3 +16,13 @@ CREATE TABLE products (
     url_img TEXT NOT NULL
         DEFAULT 'https://pub-fa9024cfefc44645b919b992e1a15089.r2.dev/default.jpg'
 );
+
+CREATE TABLE cart_itens (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    product_id UUID NOT NULL,
+    quantity INTEGER NOT NULL CHECK (quantity > 0),
+    
+    FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE,
+    FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE    
+);
