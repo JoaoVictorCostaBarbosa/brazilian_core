@@ -2,23 +2,19 @@ import uuid
 
 from app.repositories.user_repo import UserRepository
 from app.security.jwt import decode_access_token
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette import status
+
+security = HTTPBearer()
 
 
 def get_current_user(
-    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(security),
     user_repo: UserRepository = Depends(UserRepository),
 ):
-    auth_header = request.headers.get("Authorization")
+    token = credentials.credentials
 
-    if not auth_header or not auth_header.startswith("Bearer "):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token não fornecido",
-        )
-
-    token = auth_header.split(" ")[1]
     payload = decode_access_token(token)
 
     if not payload:
