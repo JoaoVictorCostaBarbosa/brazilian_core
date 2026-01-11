@@ -1,5 +1,6 @@
 from app.routers.auth_route import router as auth_router
 from app.routers.products_route import router as product_router
+from app.routers.user_route import router as user_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
@@ -19,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
+app.include_router(user_router, prefix="/api/user", tags=["User"])
 app.include_router(product_router, prefix="/api/products", tags=["Products"])
 
 
