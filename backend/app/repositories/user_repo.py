@@ -99,14 +99,16 @@ class UserRepository:
         """
 
         try:
-            cursor.execute(query, (name, id))
+            cursor.execute(query, (name, str(id)))
             row = cursor.fetchone()
             conn.commit()
 
             if not row:
                 return None
 
-            return User(*row)
+            return User(
+                id=uuid.UUID(row[0]), name=row[1], email=row[2], password=row[3]
+            )
         except psycopg2.Error:
             conn.rollback()
             raise
@@ -126,14 +128,16 @@ class UserRepository:
         """
 
         try:
-            cursor.execute(query, (email, id))
+            cursor.execute(query, (email, str(id)))
             row = cursor.fetchone()
             conn.commit()
 
             if not row:
                 return None
 
-            return User(*row)
+            return User(
+                id=uuid.UUID(row[0]), name=row[1], email=row[2], password=row[3]
+            )
         except psycopg2.Error:
             conn.rollback()
             raise
@@ -153,14 +157,16 @@ class UserRepository:
         """
 
         try:
-            cursor.execute(query, (password, id))
+            cursor.execute(query, (password, str(id)))
             row = cursor.fetchone()
             conn.commit()
 
             if not row:
                 return None
 
-            return User(*row)
+            return User(
+                id=uuid.UUID(row[0]), name=row[1], email=row[2], password=row[3]
+            )
         except psycopg2.Error:
             conn.rollback()
             raise
