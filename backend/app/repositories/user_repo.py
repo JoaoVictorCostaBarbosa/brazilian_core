@@ -38,7 +38,7 @@ class UserRepository:
         cursor = conn.cursor()
 
         query = """
-            SELECT id, name, email, password
+            SELECT id, name, email, password, role
             FROM users
             WHERE id = %s
         """
@@ -55,6 +55,7 @@ class UserRepository:
                 name=row[1],
                 email=row[2],
                 password=row[3],
+                role=row[4],
             )
         finally:
             cursor.close()
@@ -65,7 +66,7 @@ class UserRepository:
         cursor = conn.cursor()
 
         query = """
-            SELECT id, name, email, password
+            SELECT id, name, email, password, role
             FROM users
             WHERE email = %s
         """
@@ -82,6 +83,7 @@ class UserRepository:
                 name=row[1],
                 email=row[2],
                 password=row[3],
+                role=row[4],
             )
         finally:
             cursor.close()
@@ -95,7 +97,7 @@ class UserRepository:
             UPDATE users
             SET name = %s
             WHERE id = %s
-            RETURNING id, name, email, password
+            RETURNING id, name, email, password, role
         """
 
         try:
@@ -107,7 +109,11 @@ class UserRepository:
                 return None
 
             return User(
-                id=uuid.UUID(row[0]), name=row[1], email=row[2], password=row[3]
+                id=uuid.UUID(row[0]),
+                name=row[1],
+                email=row[2],
+                password=row[3],
+                role=row[4],
             )
         except psycopg2.Error:
             conn.rollback()
@@ -124,7 +130,7 @@ class UserRepository:
             UPDATE users
             SET email = %s
             WHERE id = %s
-            RETURNING id, name, email, password
+            RETURNING id, name, email, password, role
         """
 
         try:
@@ -136,7 +142,11 @@ class UserRepository:
                 return None
 
             return User(
-                id=uuid.UUID(row[0]), name=row[1], email=row[2], password=row[3]
+                id=uuid.UUID(row[0]),
+                name=row[1],
+                email=row[2],
+                password=row[3],
+                role=row[4],
             )
         except psycopg2.Error:
             conn.rollback()
@@ -153,7 +163,7 @@ class UserRepository:
             UPDATE users
             SET password = %s
             WHERE id = %s
-            RETURNING id, name, email, password
+            RETURNING id, name, email, password, role
         """
 
         try:
@@ -165,7 +175,11 @@ class UserRepository:
                 return None
 
             return User(
-                id=uuid.UUID(row[0]), name=row[1], email=row[2], password=row[3]
+                id=uuid.UUID(row[0]),
+                name=row[1],
+                email=row[2],
+                password=row[3],
+                role=row[4],
             )
         except psycopg2.Error:
             conn.rollback()
