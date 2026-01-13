@@ -1,12 +1,22 @@
 -- users
+
 INSERT INTO users (id, name, email, password, role)
-VALUES (
+VALUES
+(
     gen_random_uuid(),
     'Admin',
     'admin@email.com',
     '$argon2id$v=19$m=65536,t=3,p=4$FoOC27r4vHmPfoAYIempgg$JqgJQ4lb5HN6qQw6gsLw5/fI8EYLN8YxZE50iAxeElI',
     'admin'
-);
+),
+(
+    gen_random_uuid(),
+    'string',
+    'string',
+    '$argon2id$v=19$m=65536,t=3,p=4$vFz+RCszqdnSaudPCzrbeg$PLXBccvxsoe3nCAKxAj1EnDbohUv/yZowKP4DN8wUpA',
+    'user'
+)
+;
 
 -- products
 
