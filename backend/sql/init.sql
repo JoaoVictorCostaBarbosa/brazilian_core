@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS brazilian_core;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TYPE user_role AS ENUM ('user', 'admin');
 
