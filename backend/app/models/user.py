@@ -15,8 +15,8 @@ class User:
         name: str,
         email: str,
         password: str,
-        role: UserRole,
         id: Optional[uuid.UUID] = None,
+        role: Optional[UserRole] = None,
     ) -> None:
         self.id = id or uuid.uuid4()
         self.name = name

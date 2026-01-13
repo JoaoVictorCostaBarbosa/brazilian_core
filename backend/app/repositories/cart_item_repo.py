@@ -3,7 +3,7 @@ import uuid
 import psycopg2
 from app.db.connection import get_connection
 from app.models.cart_item import CartItem
-from app.schemas.cart_schema import CartItemResponse, CartResponse
+from app.models.item_in_cart import ItemInCart
 
 
 class CartItemRepository:
@@ -58,7 +58,7 @@ class CartItemRepository:
             cursor.close()
             conn.close()
 
-    def get_cart(self, user_id: uuid.UUID) -> CartResponse:
+    def get_cart(self, user_id: uuid.UUID) -> list[ItemInCart]:
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -78,8 +78,8 @@ class CartItemRepository:
             cursor.execute(query, (str(user_id),))
             rows = cursor.fetchall()
 
-            products = [
-                CartItemResponse(
+            return [
+                ItemInCart(
                     id=uuid.UUID(row[0]),
                     name=row[1],
                     price=row[2],
@@ -88,15 +88,13 @@ class CartItemRepository:
                 )
                 for row in rows
             ]
-
-            return CartResponse(products=products)
         finally:
             cursor.close()
             conn.close()
 
     def get_product_from_cart_by_id(
         self, user_id: uuid.UUID, product_id: uuid.UUID
-    ) -> CartItemResponse | None:
+    ) -> ItemInCart | None:
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -125,7 +123,7 @@ class CartItemRepository:
             if not row:
                 return None
 
-            return CartItemResponse(
+            return ItemInCart(
                 id=uuid.UUID(row[0]),
                 name=row[1],
                 price=row[2],
