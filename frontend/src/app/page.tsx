@@ -1,9 +1,9 @@
-import HeroSection from "./heroSection/heroSection";
+import SignInPage from "./sigin/page";
 
 export default function Home() {
   return (
     <div>
-      <HeroSection/>
+      <SignInPage/>
     </div>
   );
 }
