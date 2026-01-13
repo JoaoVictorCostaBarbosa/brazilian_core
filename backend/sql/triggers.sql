@@ -53,3 +53,36 @@ CREATE TRIGGER trg_cart_itens_decrement
 BEFORE DELETE ON cart_itens
 FOR EACH ROW
 EXECUTE FUNCTION cart_itens_decrement_or_delete();
+
+
+-- Trigger para INSERT em product_order:
+-- Ao criar um item de pedido, diminui o estoque do produto original
+
+CREATE OR REPLACE FUNCTION decrease_product_stock()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_product_id UUID;
+BEGIN
+    SELECT product_id
+    INTO v_product_id
+    FROM product_register
+    WHERE id = NEW.product_register_id;
+
+    UPDATE products
+    SET stock_quantity = stock_quantity - NEW.quantity
+    WHERE id = v_product_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Produto não encontrado para o product_register %', NEW.product_register_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_decrease_product_stock ON product_order;
+
+CREATE TRIGGER trg_decrease_product_stock
+AFTER INSERT ON product_order
+FOR EACH ROW
+EXECUTE FUNCTION decrease_product_stock();
