@@ -1,13 +1,14 @@
 -- users
-INSERT INTO users (id, name, email, password)
+INSERT INTO users (id, name, email, password, role)
 VALUES (
     gen_random_uuid(),
     'Admin',
     'admin@email.com',
-    '$argon2id$v=19$m=65536,t=3,p=4$FoOC27r4vHmPfoAYIempgg$JqgJQ4lb5HN6qQw6gsLw5/fI8EYLN8YxZE50iAxeElI'
+    '$argon2id$v=19$m=65536,t=3,p=4$FoOC27r4vHmPfoAYIempgg$JqgJQ4lb5HN6qQw6gsLw5/fI8EYLN8YxZE50iAxeElI',
+    'admin'
 );
 
--- products 
+-- products
 
 INSERT INTO products (id, name, price, description, stock_quantity) VALUES
 (uuid_generate_v4(), 'Dior Sauvage', 449.90, 'Perfume com 100ml', 30),
