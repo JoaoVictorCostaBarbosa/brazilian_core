@@ -44,18 +44,23 @@ CREATE TABLE orders (
     coupon_id UUID,
     purchase_at TIMESTAMP NOT NULL,
 
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (coupon_id) REFERENCES coupons(id)
 );
 
 CREATE TABLE product_register (
     id UUID PRIMARY KEY,
+    order_id UUID NOT NULL,
+    product_id UUID NOT NULL,
     name TEXT NOT NULL,
     price NUMERIC(10, 2) NOT NULL CHECK (price > 0),
     description TEXT NOT NULL,
     url_img TEXT NOT NULL
-        DEFAULT 'https://pub-fa9024cfefc44645b919b992e1a15089.r2.dev/default.jpg'
+        DEFAULT 'https://pub-fa9024cfefc44645b919b992e1a15089.r2.dev/default.jpg',
+
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE product_order (
     id UUID PRIMARY KEY,
