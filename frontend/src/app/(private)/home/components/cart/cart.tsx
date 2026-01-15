@@ -16,10 +16,10 @@ export interface Parfum {
 
 export default function Cart(){ 
   const [isOpen, setOpen] = useState(false); 
-  const { cartItems, getCartItems } = useCart();
+  const { cartItems, getCartItems, getCurrCartItems } = useCart();
 
   useEffect(() => {
-    getCartItems();
+    getCurrCartItems();
   }, [cartItems]);
 
   const hasItems = cartItems.length;
