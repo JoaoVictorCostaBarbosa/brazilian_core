@@ -2,21 +2,26 @@
 
 INSERT INTO users (id, name, email, password, role)
 VALUES
-(
-    gen_random_uuid(),
-    'Admin',
-    'admin@email.com',
-    '$argon2id$v=19$m=65536,t=3,p=4$FoOC27r4vHmPfoAYIempgg$JqgJQ4lb5HN6qQw6gsLw5/fI8EYLN8YxZE50iAxeElI',
-    'admin'
-),
-(
-    gen_random_uuid(),
-    'string',
-    'string',
-    '$argon2id$v=19$m=65536,t=3,p=4$vFz+RCszqdnSaudPCzrbeg$PLXBccvxsoe3nCAKxAj1EnDbohUv/yZowKP4DN8wUpA',
-    'user'
-)
-;
+(gen_random_uuid(), 'Admin', 'admin@email.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$FoOC27r4vHmPfoAYIempgg$JqgJQ4lb5HN6qQw6gsLw5/fI8EYLN8YxZE50iAxeElI', 'admin'),
+(gen_random_uuid(), 'string', 'string',
+ '$argon2id$v=19$m=65536,t=3,p=4$vFz+RCszqdnSaudPCzrbeg$PLXBccvxsoe3nCAKxAj1EnDbohUv/yZowKP4DN8wUpA', 'user'),
+(gen_random_uuid(), 'João Victor', 'joao@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQx$k5rP9r6yQF6r9nQp9zqPz9G7Q3n1F6q9mQn2dQpR2u8', 'user'),
+(gen_random_uuid(), 'Maria Silva', 'maria@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQy$z7P2Kk2xvZ0X7KQvH8xY9C5P0k0mG0FqkHnq8dZ8G0U', 'user'),
+(gen_random_uuid(), 'Pedro Santos', 'pedro@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQz$Hq8VJrCqD6H6vGvY0y0C6WmQ8Xx9FvP3MZCk1D3k9pE', 'user'),
+(gen_random_uuid(), 'Ana Costa', 'ana@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQ0$RZ1mJXkK9WkR1Dq8MZx7J6r0TtZp3WnX1GQ0HqKk5VY', 'user'),
+(gen_random_uuid(), 'Lucas Rocha', 'lucas@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQ1$KZ9G1M0kF0YkJ9xZP6Ck8VqW7rR3TqQmHnD2J6P9WkM', 'user'),
+(gen_random_uuid(), 'Beatriz Lima', 'bia@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQ2$8FZkKqXx0KJH9Rr1C3D6PZJk0mY6H7V8Q1WmG9pX2U', 'user'),
+(gen_random_uuid(), 'Rafael Alves', 'rafa@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQ3$Y1Z0VZrFJrZxD0Z9T2Wk6JmP0XKQF9Hkq8R7G1M5Ck', 'admin'),
+(gen_random_uuid(), 'Carla Mendes', 'carla@teste.com',
+ '$argon2id$v=19$m=65536,t=3,p=4$VGVzdFNhbHQ4$QkP1C6H8VJZ7ZrX0DkF9M2mR5Wq8Y6J0T9KXH1GZP', 'user');
 
 -- products
 
@@ -71,3 +76,27 @@ INSERT INTO products (id, name, price, description, stock_quantity) VALUES
 (uuid_generate_v4(), 'Mercedes Benz Club', 329.90, 'Perfume com 100ml', 35),
 (uuid_generate_v4(), 'Jimmy Choo Man', 349.90, 'Perfume com 100ml', 29),
 (uuid_generate_v4(), 'Halloween Man X', 289.90, 'Perfume com 100ml', 37);
+
+-- coupons
+
+INSERT INTO coupons (id, code, discount_percentage, expires_at) VALUES
+(gen_random_uuid(), 'WELCOME10', 10, NOW() + INTERVAL '30 days'),
+(gen_random_uuid(), 'SAVE15', 15, NOW() + INTERVAL '45 days'),
+(gen_random_uuid(), 'OFF20', 20, NOW() + INTERVAL '60 days'),
+(gen_random_uuid(), 'PROMO25', 25, NOW() + INTERVAL '15 days'),
+(gen_random_uuid(), 'DEAL30', 30, NOW() + INTERVAL '20 days'),
+(gen_random_uuid(), 'TECH5', 5, NOW() + INTERVAL '90 days'),
+(gen_random_uuid(), 'NEWUSER12', 12, NOW() + INTERVAL '40 days'),
+(gen_random_uuid(), 'SPRING18', 18, NOW() + INTERVAL '35 days'),
+(gen_random_uuid(), 'SUMMER22', 22, NOW() + INTERVAL '50 days'),
+(gen_random_uuid(), 'FLASH8', 8, NOW() + INTERVAL '7 days'),
+(gen_random_uuid(), 'VIP40', 40, NOW() + INTERVAL '10 days'),
+(gen_random_uuid(), 'BLACK50', 50, NOW() + INTERVAL '5 days'),
+(gen_random_uuid(), 'MEGA35', 35, NOW() + INTERVAL '25 days'),
+(gen_random_uuid(), 'DEV17', 17, NOW() + INTERVAL '70 days'),
+(gen_random_uuid(), 'STACK9', 9, NOW() + INTERVAL '55 days'),
+(gen_random_uuid(), 'RUST14', 14, NOW() + INTERVAL '80 days'),
+(gen_random_uuid(), 'JAVA19', 19, NOW() + INTERVAL '65 days'),
+(gen_random_uuid(), 'API27', 27, NOW() + INTERVAL '33 days'),
+(gen_random_uuid(), 'CLOUD45', 45, NOW() + INTERVAL '12 days'),
+(gen_random_uuid(), 'FINAL60', 60, NOW() + INTERVAL '3 days');
