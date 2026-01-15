@@ -1,6 +1,7 @@
 from app.routers.auth_route import router as auth_router
 from app.routers.cart_item_router import router as cart_router
 from app.routers.coupon_route import router as coupon_router
+from app.routers.order_router import router as order_router
 from app.routers.products_route import router as product_router
 from app.routers.review_route import router as review_router
 from app.routers.user_route import router as user_router
@@ -28,6 +29,7 @@ app.include_router(product_router, prefix="/api/products", tags=["Product"])
 app.include_router(cart_router, prefix="/api/cart", tags=["Cart"])
 app.include_router(coupon_router, prefix="/api/coupon", tags=["Coupon"])
 app.include_router(review_router, prefix="/api/review", tags=["Review"])
+app.include_router(order_router, prefix="/api/order", tags=["Order"])
 
 
 @app.get("/health")
