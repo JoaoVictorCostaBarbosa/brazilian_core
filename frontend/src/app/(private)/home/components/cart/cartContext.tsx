@@ -14,7 +14,7 @@ interface CartContextProps {
   addToCart: (id: string) => Promise<void>;
   removeFromCart: (id: string) => Promise<void>;
   getCartItems: () => Promise<CartItemProps[]>;
-  clearCart: () => void;
+  getCurrCartItems: () => CartItemProps[];
   total: number;
 }
 
@@ -24,46 +24,62 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItemProps[]>([]);
 
   async function addToCart(id: string) {
-  try {
-    const status = await setCartItem(id);
+    try {
+      const status = await setCartItem(id);
+      if (status !== 201) return;
 
-    if (status !== 201) return;
+      const product = await getProductsById(id);
 
-    setCartItems(prev => {
-      const itemExists = prev.find(item => item.id === id);
+      setCartItems(prev => {
+        const exists = prev.find(item => item.id === id);
 
-      if (itemExists) {
-        return prev.map(item =>
-          item.id === id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
+        if (exists) {
+          return prev.map(item =>
+            item.id === id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
 
-      return prev; 
-    });
+        return [...prev, { ...product, quantity: 1 }];
+      });
 
-    const product = await getProductsById(id);
-
-    setCartItems(prev => [
-      ...prev,
-      { ...product, quantity: 1 }
-    ]);
-
-  } catch (error) {
-    console.error("Erro ao adicionar ao carrinho:", error);
+    } catch (error) {
+      console.error("Erro ao adicionar ao carrinho:", error);
+    }
   }
-}
+
+  function getCurrCartItems(){
+    return cartItems;
+  }
+
 
 
   async function removeFromCart(id: string) {
     try {
-      await removeCartItem(id);
-      
+      const status = await removeCartItem(id);
+      if (status !== 200 && status !== 204) return;
+
+      setCartItems(prev => {
+        const exists = prev.find(item => item.id === id);
+        if (!exists) return prev;
+
+        if (exists.quantity > 1) {
+          return prev.map(item =>
+            item.id === id
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          );
+        }
+
+        return prev.filter(item => item.id !== id);
+      });
+
     } catch (error) {
       console.error("Erro ao remover item do carrinho:", error);
     }
-  }
+  } 
+
 
   async function getCartItems() {
     try {
@@ -74,10 +90,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       console.error("Erro ao buscar itens do carrinho:", error);
       throw error;
     }
-  }
-
-  function clearCart() {
-    setCartItems([]);
   }
 
   const total = cartItems.reduce(
@@ -92,7 +104,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         addToCart,
         removeFromCart,
         getCartItems,
-        clearCart,
+        getCurrCartItems,
         total
       }}
     >
