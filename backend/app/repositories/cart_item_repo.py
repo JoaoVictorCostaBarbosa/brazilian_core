@@ -133,3 +133,26 @@ class CartItemRepository:
         finally:
             cursor.close()
             conn.close()
+
+    def clear_user_cart(self, user_id: uuid.UUID):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+            DELETE FROM cart_itens
+            WHERE user_id = %s;
+        """
+
+        try:
+            cursor.execute(
+                query,
+                (str(user_id),),
+            )
+            conn.commit()
+
+        except psycopg2.Error:
+            conn.rollback()
+            raise
+        finally:
+            cursor.close()
+            conn.close()
