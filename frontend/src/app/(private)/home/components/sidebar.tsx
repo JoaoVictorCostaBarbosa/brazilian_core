@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Sidebar(){
       const [isOpen, setOpen] = useState(false);
     
     return(
-        <div>
+        <div >
         <button
           className="bg-teal-950 mr-0 p-2 rounded-l-lg pr-4 cursor-pointer hover:shadow-lg hover:shadow-amber-200 transition-all duration-300"
           onClick={() => setOpen(!isOpen)}
@@ -29,20 +30,19 @@ export default function Sidebar(){
 
       {isOpen && (
         <aside
-          className="fixed top-0 right-0 h-full w-64 bg-teal-950 z-20 transform transition-transform duration-300">
+          className={`fixed top-0 right-0 w-64 bg-teal-950 z-20 transform transition-transform duration-300 h-screen`}>
           <button
             className="text-amber-200 text-xl p-4"
-            onClick={() => setOpen(false)}
+            onClick={() => setOpen(!isOpen)}
           >
             ✕
           </button>
 
-          <div className="p-6">
+          <div className="p-6 bg-teal-950">
             <nav className="flex flex-col gap-4 mt-6">
-              <a className="hover:text-amber-400 cursor-pointer text-amber-200">Home</a>
-              <a className="hover:text-amber-400 cursor-pointer text-amber-200">Perfil</a>
-              <a className="hover:text-amber-400 cursor-pointer text-amber-200">Configurações</a>
-              <a className="hover:text-amber-400 cursor-pointer text-amber-200">Sair</a>
+              <Link href={"/user"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Perfil</Link>
+              <a className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Configurações</a>
+              <a className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Sair</a>
             </nav>
           </div>
         </aside>
