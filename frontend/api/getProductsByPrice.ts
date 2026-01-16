@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Parfum } from '@/app/(private)/home/components/cart/cart';
 
 export async function getProductsByPrice(price : number) {
   const auth_token = Cookies.get('auth_token');
