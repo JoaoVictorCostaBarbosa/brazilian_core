@@ -1,3 +1,5 @@
+from decimal import Decimal
+from typing import Optional
 from app.models.order import Order
 from app.models.product_order import ProductOrder
 from app.models.user import User
@@ -9,12 +11,14 @@ from app.schemas.order_schema import OrderResponse, to_order_response
 from app.security.auth import get_current_user
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
+from app.repositories.coupon_repo import CouponRepository
 
 router = APIRouter()
 
 
 @router.post("/", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 def purchase_from_cart(
+    coupon_code: Optional[str] = None,
     current_user: User = Depends(get_current_user),
     order_repo: OrderRepository = Depends(OrderRepository),
     product_order_repo: ProductOrderRepository = Depends(ProductOrderRepository),
@@ -22,6 +26,7 @@ def purchase_from_cart(
         ProductRegisterRepository
     ),
     cart_item_repo: CartItemRepository = Depends(CartItemRepository),
+    coupon_repo: CouponRepository = Depends(CouponRepository)
 ):
     products = cart_item_repo.get_cart(current_user.id)
 
@@ -31,11 +36,29 @@ def purchase_from_cart(
             detail="Não é possivel realziar uma compra com o carrinho vazio",
         )
 
-    order = Order(current_user.id)
+    if coupon_code:
+        coupon = coupon_repo.get_coupon_by_code(coupon_code)
+    
+        if not coupon:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Cupom inválido",
+            )
+    
+        order = Order(current_user.id, coupon_id=coupon.id)
+    else:
+        coupon = None
+        order = Order(current_user.id)
+
 
     order_repo.create_order(order)
 
     for p in products:
+        
+        if coupon:
+            factor = Decimal(1) - (Decimal(coupon.discount_percentage) / Decimal(100))
+            p.price = p.price * factor
+        
         product_register_id = product_register_repo.create_product_register(
             p.id, order.id
         )
