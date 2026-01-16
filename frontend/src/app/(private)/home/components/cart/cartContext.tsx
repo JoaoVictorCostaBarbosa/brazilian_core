@@ -15,7 +15,6 @@ interface CartContextProps {
   removeFromCart: (id: string) => Promise<void>;
   getCartItems: () => Promise<CartItemProps[]>;
   getCurrCartItems: () => CartItemProps[];
-  total: number;
 }
 
 const CartContext = createContext({} as CartContextProps);
@@ -92,10 +91,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   return (
     <CartContext.Provider
@@ -105,7 +100,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeFromCart,
         getCartItems,
         getCurrCartItems,
-        total
       }}
     >
       {children}
