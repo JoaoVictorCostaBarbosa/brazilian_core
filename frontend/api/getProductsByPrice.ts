@@ -1,45 +1,24 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export async function getProductsByPrice(price : number) {
+const API_BASE_URL = 'http://localhost:8000/api';
+
+export async function getProductsByPrice(price: number) {
   const auth_token = Cookies.get('auth_token');
   
-  if(!auth_token){
+  if (!auth_token) {
     throw new Error("No auth token found");
   }
 
-  try{
-    const response = await axios.get(`http://localhost:8000/api/products/price/${price}`, {
-        headers: {
-            Authorization: `Bearer ${auth_token}` 
-        }
+  try {
+    const response = await axios.get(`${API_BASE_URL}/products/price/${price}`, {
+      headers: {
+        Authorization: `Bearer ${auth_token}` 
+      }
     });
-    const data = await response.data;
-    return data;
-
-    } catch (error) {
-        console.error("Error fetching parfums:", error);
-    }
-}
-
-export async function getProductsById(id : string) {
-  const auth_token = Cookies.get('auth_token');
-  
-  if(!auth_token){
-    throw new Error("No auth token found");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching products by price:", error);
+    throw error; 
   }
-
-  try{
-    const response = await axios.get(`http://localhost:8000/api/products/${id}`, {
-        headers: {
-            Authorization: `Bearer ${auth_token}` 
-        }
-    });
-    const data = await response.data;
-    return data;
-
-    } catch (error) {
-        console.error("Error fetching parfums:", error);
-    }
 }
-    
