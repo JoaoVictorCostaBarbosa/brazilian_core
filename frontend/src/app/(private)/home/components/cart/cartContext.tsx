@@ -3,7 +3,7 @@
 import { createContext, useContext, useState } from "react";
 import { Parfum } from "./cart";
 import { setCartItem, removeCartItem, getCarItem } from "../../../../../../api/cart";
-import { getProductsById } from "../../../../../../api/getProductsByPrice";
+import { getProductsById } from "../../../../../../api/getProductById";
 
 export interface CartItemProps extends Parfum {
   quantity: number;
