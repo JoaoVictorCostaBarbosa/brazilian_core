@@ -76,7 +76,7 @@ INSERT INTO products (id, name, price, description, stock_quantity) VALUES
 (uuid_generate_v4(), 'Carolina Herrera Bad Boy', 419.90, 'Perfume com 100ml', 20),
 (uuid_generate_v4(), 'Mercedes Benz Club', 329.90, 'Perfume com 100ml', 35),
 (uuid_generate_v4(), 'Jimmy Choo Man', 349.90, 'Perfume com 100ml', 29),
-(uuid_generate_v4(), 'Halloween Man X', 289.90, 'Perfume com 100ml', 37)
+(uuid_generate_v4(), 'Halloween Man X', 289.90, 'Perfume com 100ml', 37),
 
 --(51 - 100)
 (uuid_generate_v4(), 'Creed Aventus', 1890.90, 'Perfume de Nicho com 100ml', 10),
