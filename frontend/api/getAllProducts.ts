@@ -10,7 +10,7 @@ interface Parfum {
     url_img: string
 }
 
-export default async function getProducts() {
+export default async function getProducts(start: number, end:number) {
   const auth_token = Cookies.get('auth_token');
   
   if(!auth_token){
@@ -18,7 +18,7 @@ export default async function getProducts() {
   }
 
   try{
-    const response = await axios.get('http://localhost:8000/api/products', {
+    const response = await axios.get(`http://localhost:8000/api/products/${start}/${end}`, {
         headers: {
             Authorization: `Bearer ${auth_token}` 
         }
