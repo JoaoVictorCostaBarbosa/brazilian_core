@@ -110,7 +110,7 @@ export default function UserCard() {
 
     {success && (
       <div className="mt-3 text-teal-950 text-sm font-semibold px-4 py-2 rounded-lg text-center">
-        Dados atualizados com sucesso ✅
+        Dados atualizados com sucesso 
       </div>
     )}
     </div>

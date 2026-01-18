@@ -4,17 +4,12 @@ import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { User } from "@/app/login/components/loginCard";
 
 interface SiginData {
   name: string;
   email: string;
   password: string;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
 }
 
 interface AuthResponse {

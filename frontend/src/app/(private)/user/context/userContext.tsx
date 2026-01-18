@@ -7,6 +7,7 @@ export interface UserPropsReturn {
   id: string;
   name: string;
   email: string;
+  role: string;
 }
 
 interface UserContextProps {
