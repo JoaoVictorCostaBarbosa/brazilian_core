@@ -145,7 +145,6 @@ export async function patchReviewComment(id: string, comment: string) {
         }
     )
 
-    console.log(response.data)
 
     return response;
 
