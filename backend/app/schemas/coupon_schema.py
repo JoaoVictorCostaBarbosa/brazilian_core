@@ -31,9 +31,14 @@ class CouponUpdateRequest(BaseModel):
 
 
 def to_coupon_reponse(data: Coupon) -> CouponResponse:
+    expires_at = (
+        data.expires_at.date() # type: ignore
+        if hasattr(data.expires_at, "date")
+        else data.expires_at
+    )
     return CouponResponse(
         id=data.id,
         code=data.code,
         discount_percentage=data.discount_percentage,
-        expires_at=data.expires_at.date(),  # type: ignore
+        expires_at=expires_at, 
     )

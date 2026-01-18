@@ -35,10 +35,10 @@ def create_coupon(
             detail="Já existe um cupom com esse código",
         )
     
-    if coupon_data.discount_percentage < 1 and coupon_data.discount_percentage > 100:
+    if coupon_data.discount_percentage < 1 or coupon_data.discount_percentage > 100:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="A porcentagem de disconto deve ser entre 0% e 100%",
+            detail="A porcentagem de disconto deve ser entre 1% e 100%",
         )
 
     coupon = coupon_data.to_model()
@@ -86,7 +86,7 @@ def update_coupon_discount(
             detail="Somente admins podem atualizar cupons",
         )
 
-    if update_data.discount_percentage < 1 and update_data.discount_percentage > 100:
+    if update_data.discount_percentage < 1 or update_data.discount_percentage > 100:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="A porcentagem de disconto deve ser entre 1% e 100%",
