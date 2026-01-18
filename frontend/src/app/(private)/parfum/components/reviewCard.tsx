@@ -47,8 +47,6 @@ export default function ReviewBox({ id }: ReviewBoxProps) {
       <h2 className="text-2xl font-bold text-teal-950">Reviews</h2>
 
       {loading && <p>Carregando...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-
       {reviews.length > 0 ? (<RenderReviews reviews={reviews} />) : (<h2>Sem reviews no momento</h2>)}
       {error && (
           <span className="text-sm text-red-600 font-medium">

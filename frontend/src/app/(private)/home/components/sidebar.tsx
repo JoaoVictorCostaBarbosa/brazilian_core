@@ -38,6 +38,7 @@ export default function Sidebar(){
           <div className="p-6 bg-teal-950">
             <nav className="flex flex-col gap-4 mt-6">
               <Link href={"/user"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Perfil</Link>
+              <Link href={"/userReview"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Ver minhas avaliações</Link>
               <a className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Configurações</a>
               <a className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Sair</a>
             </nav>
