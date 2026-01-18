@@ -16,7 +16,7 @@ export default function ParfumBox({ parfum }: ParfumBoxProps){
                 <img src={parfum.url_img} alt={parfum.name} className="w-full h-100 object-cover rounded-t-lg"/>
             </div>
             <div className="flex justify-center items-center flex-col h-50">
-                <h2 className="text-xl text-emerald-900 text-center plaster-regular">{parfum.name}</h2>
+                <h2 className="text-4xl font-extrabold text-emerald-900 text-center ">{parfum.name}</h2>
                 <p className="text-center text-emerald-900">{parfum.description}</p>
                 <h3 className="text-center text-emerald-900 font-bold">R$ {parfum.price}</h3>
             </div>    
