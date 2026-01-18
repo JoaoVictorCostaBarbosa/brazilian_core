@@ -1,6 +1,6 @@
 import uuid
 
-from app.models.user import User
+from app.models.user import User, UserRole
 from pydantic import BaseModel
 
 
@@ -22,6 +22,7 @@ class UserResponse(BaseModel):
     id: uuid.UUID
     name: str
     email: str
+    role: UserRole | None
 
 
 class AuthResponse(BaseModel):
@@ -30,4 +31,4 @@ class AuthResponse(BaseModel):
 
 
 def to_user_response(data: User) -> UserResponse:
-    return UserResponse(id=data.id, name=data.name, email=data.email)
+    return UserResponse(id=data.id, name=data.name, email=data.email, role=data.role)

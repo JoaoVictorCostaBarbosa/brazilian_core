@@ -24,14 +24,16 @@ class CouponResponse(BaseModel):
     discount_percentage: int
     expires_at: date
 
+
 class CouponUpdateRequest(BaseModel):
     id: uuid.UUID
     discount_percentage: int
+
 
 def to_coupon_reponse(data: Coupon) -> CouponResponse:
     return CouponResponse(
         id=data.id,
         code=data.code,
         discount_percentage=data.discount_percentage,
-        expires_at=data.expires_at,
+        expires_at=data.expires_at.date(),  # type: ignore
     )
