@@ -67,7 +67,7 @@ export default function SiginCard(){
 
     return(
         <div className="w-[30vw] py-20 bg-white/10 backdrop-blur-xs border-2 outline-none shadow shadow-gray-600 border-white/20 rounded-lg flex flex-col justify-center items-center">
-            <h1 className='text-5xl plaster-regular text-amber-200'>Cadastro</h1>
+            <h1 className='text-5xl font-bold text-amber-200'>Cadastro</h1>
             <p className='text-lg text-amber-200 mb-10'>Brazilian Core - A casa de perfumaria do Brasil</p>
 
           <form onSubmit={handleSubmit((data) => {
