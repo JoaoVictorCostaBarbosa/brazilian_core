@@ -1,5 +1,5 @@
 import "./globals.css";
-import { CartProvider } from "./(private)/home/components/cart/cartContext";
+import { CartProvider } from "./(private)/cart/cartContext";
 import { UserProvider } from "./(private)/user/context/userContext";
 
 export default function RootLayout({
