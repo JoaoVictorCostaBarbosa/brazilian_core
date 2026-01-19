@@ -11,7 +11,7 @@ export default function RenderCartItems({ cartItems }: RenderCartItemsProps) {
   }
 
   return (
-    <div className="text-teal-950 w-full">
+    <div className="text-teal-950 bg-amber-100 ">
       {cartItems.map(item => (
         <CartItem key={item.id} item={item} />
       ))}

@@ -1,5 +1,5 @@
-import { Parfum } from "../../home/components/cart/cart";
-import { useCart } from "../../home/components/cart/cartContext";
+import { Parfum } from "../../cart/page";
+import { useCart } from "../../cart/cartContext";
 import ReviewBox from "./reviewCard";
 
 interface TesteProps {

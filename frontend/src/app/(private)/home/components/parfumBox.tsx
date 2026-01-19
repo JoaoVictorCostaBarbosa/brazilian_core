@@ -1,5 +1,5 @@
-import { Parfum } from "./cart/cart";
-import { useCart } from "./cart/cartContext";
+import { Parfum } from "../../cart/page";
+import { useCart } from "../../cart/cartContext";
 import Link from "next/link";
 
 interface ParfumBoxProps {
