@@ -1,7 +1,7 @@
 "use client";
 
 import ParfumBox from "./parfumBox";
-import { Parfum } from "./cart/cart";
+import { Parfum } from "../../cart/page";
 
 interface RenderParfumProps {
   parfum: Parfum[];
