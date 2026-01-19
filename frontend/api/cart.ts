@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Parfum } from '@/app/(private)/home/components/cart/cart';
+import { Parfum } from '@/app/(private)/cart/page';
 
 
 export interface CartItem extends Parfum {
