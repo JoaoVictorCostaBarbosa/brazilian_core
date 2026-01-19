@@ -30,7 +30,7 @@ def purchase_from_cart(
 ):
     products = cart_item_repo.get_cart(current_user.id)
 
-    if not products[0]:
+    if not products:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Não é possivel realziar uma compra com o carrinho vazio",
@@ -83,3 +83,4 @@ def purchase_from_cart(
     cart_item_repo.clear_user_cart(current_user.id)
 
     return to_order_response(result)
+
