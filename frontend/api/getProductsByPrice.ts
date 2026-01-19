@@ -1,8 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API_BASE_URL = 'http://localhost:8000/api';
-
 export async function getProductsByPrice(price: number) {
   const auth_token = Cookies.get('auth_token');
   
@@ -11,7 +9,7 @@ export async function getProductsByPrice(price: number) {
   }
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/products/price/${price}`, {
+    const response = await axios.get(`http://localhost:8000/api/products/price/${price}`, {
       headers: {
         Authorization: `Bearer ${auth_token}` 
       }

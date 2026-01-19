@@ -1,14 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-interface Parfum {
-    id: string,
-    name: string,
-    price: number
-    description: string,
-    stock_quantity: number,
-    url_img: string
-}
 
 export default async function getProducts(start: number, end:number) {
   const auth_token = Cookies.get('auth_token');
