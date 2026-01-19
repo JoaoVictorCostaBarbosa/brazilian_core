@@ -5,8 +5,7 @@ import getProducts from "../../../../api/getAllProducts";
 import SubHeader from "./components/subHeader";
 import RenderParfum from "./components/renderParfum";
 import Header from "./components/header";
-import { Parfum } from "./components/cart/cart";
-
+import { Parfum } from "../cart/page";
 
 export default function HeroSection() {
   const [parfum, setParfum] = useState<Parfum[]>([]);
