@@ -12,6 +12,7 @@ export interface CartItemProps extends Parfum {
 interface CartContextProps {
   cartItems: CartItemProps[];
   addToCart: (id: string) => Promise<void>;
+  setCartItems: React.Dispatch<React.SetStateAction<CartItemProps[]>>;
   removeFromCart: (id: string) => Promise<void>;
   getCartItems: () => Promise<CartItemProps[]>;
   getCurrCartItems: () => CartItemProps[];
@@ -97,6 +98,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       value={{
         cartItems,
         addToCart,
+        setCartItems,
         removeFromCart,
         getCartItems,
         getCurrCartItems,
