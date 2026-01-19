@@ -40,12 +40,9 @@ export default function Header( {setParfum}: HeaderProps ) {
       if(!data.preco){
         return
       }
-
-      let formatedPrice = data.preco.replace(",", ".");
-      let numberPrice = Number(formatedPrice);
-      getFilteredParfum(numberPrice);
+      getFilteredParfum(data.preco);
      })} className="flex gap-2">
-          <input {...register("preco", { pattern: /^\d+(,\d{1,2})?$/})} placeholder="Busque pelo preço" className=" outline-none border-0 border-b-3 border-teal-950 py-2 pl-2 focus:border-teal-700 hover:border-teal-700 transition-colors duration-300 ease-in-out text-teal-950"/>
+          <input type="number" {...register("preco", { pattern: /^\d+(,\d{1,2})?$/})} placeholder="Busque pelo preço" className=" outline-none border-0 border-b-3 border-teal-950 py-2 pl-2 focus:border-teal-700 hover:border-teal-700 transition-colors duration-300 ease-in-out text-teal-950"/>
           <button type="submit" className=" border-2 border-transparent bg-teal-950 rounded-md text-amber-200 hover:bg-amber-200 hover:text-teal-950 hover:border-2 hover:border-teal-950 hover:shadow transition-colors duration-300 ease-in-out px-3">
             Buscar
           </button>
