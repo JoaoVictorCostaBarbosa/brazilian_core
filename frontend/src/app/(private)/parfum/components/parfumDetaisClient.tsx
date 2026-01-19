@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getProductsById } from "../../../../../api/getProductById";
 import RenderParfumPage from "./renderParfumDetailsPage";
-import { Parfum } from "../../home/components/cart/cart";
+import { Parfum } from "../../cart/page";
 
 interface Props {
   productId: string;
