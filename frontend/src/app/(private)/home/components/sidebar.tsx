@@ -40,8 +40,7 @@ export default function Sidebar(){
               <Link href={"/user"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Perfil</Link>
               <Link href={"/userReview"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Ver minhas avaliações</Link>
               <Link href={"/coupon"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Ver cupons</Link>
-              <a className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Configurações</a>
-              <a className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Sair</a>
+              <Link href={"/sigin"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Sair</Link>
             </nav>
           </div>
         </aside>
