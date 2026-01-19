@@ -12,25 +12,16 @@ router = APIRouter()
 
 
 @router.get(
-    "/{start}/{end}",
+    "/price/{price}",
     response_model=list[ProductResponse],
     status_code=status.HTTP_200_OK,
 )
-def read_products(
-    start: int,
-    end: int,
+def get_product_by_price(
+    price: Decimal,
     product_repo: ProductRepository = Depends(ProductRepository),
     _: User = Depends(get_current_user),
 ):
-    products = product_repo.read_products()
-
-    if start < 0:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="indice de inicio da paginação deve ser positivo",
-        )
-
-    products = products[start:end]
+    products = product_repo.get_product_by_price(price)
 
     return [to_product_reponse(product) for product in products]
 
@@ -54,15 +45,24 @@ def get_product_by_id(
 
 
 @router.get(
-    "/price/{price}",
+    "/{start}/{end}",
     response_model=list[ProductResponse],
     status_code=status.HTTP_200_OK,
 )
-def get_product_by_price(
-    price: Decimal,
+def read_products(
+    start: int,
+    end: int,
     product_repo: ProductRepository = Depends(ProductRepository),
     _: User = Depends(get_current_user),
 ):
-    products = product_repo.get_product_by_price(price)
+    products = product_repo.read_products()
+
+    if start < 0:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="indice de inicio da paginação deve ser positivo",
+        )
+
+    products = products[start:end]
 
     return [to_product_reponse(product) for product in products]
