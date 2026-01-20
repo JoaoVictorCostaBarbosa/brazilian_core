@@ -171,3 +171,42 @@ class OrderRepository:
         finally:
             cursor.close()
             conn.close()
+
+    def get_orders_summary_by_user(self, user_id: uuid.UUID):
+        conn = get_connection()
+        cursor = conn.cursor()
+    
+        query = """
+            SELECT
+                order_id,
+                user_id,
+                coupon_id,
+                order_purchase_at,
+                total_products,
+                total_items,
+                total_value
+            FROM vw_order_summary
+            WHERE user_id = %s
+            ORDER BY order_purchase_at DESC;
+        """
+    
+        try:
+            cursor.execute(query, (str(user_id),))
+            rows = cursor.fetchall()
+    
+            return rows
+            # [
+            #   (
+            #     order_id,
+            #     user_id,
+            #     coupon_id,
+            #     purchase_at,
+            #     total_products,
+            #     total_items,
+            #     total_value
+            #   ),
+            #   ...
+            # ]
+        finally:
+            cursor.close()
+            conn.close()

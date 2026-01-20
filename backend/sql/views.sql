@@ -17,4 +17,27 @@ FROM orders o
 JOIN product_order po
     ON o.id = po.order_id
 JOIN product_register pr
+    ON po.product_register_id = pr.id;
+
+
+CREATE OR REPLACE VIEW vw_order_summary AS
+SELECT
+    o.id AS order_id,
+    o.user_id,
+    o.coupon_id,
+    o.purchase_at AS order_purchase_at,
+
+    COUNT(po.product_register_id)            AS total_products,
+    SUM(po.quantity)                         AS total_items,
+    SUM(pr.price * po.quantity)              AS total_value
+
+FROM orders o
+JOIN product_order po
+    ON o.id = po.order_id
+JOIN product_register pr
     ON po.product_register_id = pr.id
+GROUP BY
+    o.id,
+    o.user_id,
+    o.coupon_id,
+    o.purchase_at;

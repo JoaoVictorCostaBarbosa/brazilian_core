@@ -13,6 +13,9 @@ class ItemInCartResponse(BaseModel):
     url_img: str
 
 
+class CartCouponRequest(BaseModel):
+    coupon_id: uuid.UUID
+
 def to_item_in_cart_response(data: ItemInCart) -> ItemInCartResponse:
     return ItemInCartResponse(
         id=data.id,

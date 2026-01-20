@@ -156,3 +156,33 @@ class CartItemRepository:
         finally:
             cursor.close()
             conn.close()
+
+def get_cart_with_total(self, user_id: uuid.UUID):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT
+          p.id,
+          p.name,
+          p.price,
+          p.url_img,
+          ci.quantity,
+
+          (p.price * ci.quantity) AS item_total,
+
+          SUM(p.price * ci.quantity)
+              OVER (PARTITION BY ci.user_id) AS cart_total
+        FROM cart_itens ci
+        JOIN products p ON p.id = ci.product_id
+        WHERE ci.user_id = %s;
+    """
+
+    try:
+        cursor.execute(query, (str(user_id),))
+        rows = cursor.fetchall()
+
+        return rows  # [(id, name, price, url, qty, item_total, cart_total)]
+    finally:
+        cursor.close()
+        conn.close()
