@@ -2,87 +2,48 @@ import uuid
 from decimal import Decimal
 from typing import Tuple
 
-from app.db.connection import get_connection
 from app.models.products import Product
+from app.repositories.base import BaseRepository
 
 
-class ProductRepository:
+class ProductRepository(BaseRepository):
     def read_products(self) -> list[Product]:
-        conn = get_connection()
-        cursor = conn.cursor()
-
         query = """
-            SELECT
-              id,
-              name,
-              price,
-              description,
-              stock_quantity,
-              url_img
+            SELECT id, name, price, description, stock_quantity, url_img
             FROM products
         """
-
-        try:
+        with self._get_cursor() as (conn, cursor):
             cursor.execute(query)
             rows = cursor.fetchall()
 
-            return [self._row_to_product(row) for row in rows]
-        finally:
-            cursor.close()
-            conn.close()
+        return [self._row_to_product(row) for row in rows]
 
     def get_product_by_id(self, product_id: uuid.UUID) -> Product | None:
-        conn = get_connection()
-        cursor = conn.cursor()
-
         query = """
-            SELECT
-              id,
-              name,
-              price,
-              description,
-              stock_quantity,
-              url_img
+            SELECT id, name, price, description, stock_quantity, url_img
             FROM products
             WHERE id = %s
         """
-
-        try:
+        with self._get_cursor() as (conn, cursor):
             cursor.execute(query, (str(product_id),))
             row = cursor.fetchone()
 
-            if not row:
-                return None
+        if not row:
+            return None
 
-            return self._row_to_product(row)
-        finally:
-            cursor.close()
-            conn.close()
+        return self._row_to_product(row)
 
     def get_product_by_price(self, price: Decimal) -> list[Product]:
-        conn = get_connection()
-        cursor = conn.cursor()
-
         query = """
-            SELECT
-              id,
-              name,
-              price,
-              description,
-              stock_quantity,
-              url_img
+            SELECT id, name, price, description, stock_quantity, url_img
             FROM products
             WHERE price <= %s
         """
-
-        try:
+        with self._get_cursor() as (conn, cursor):
             cursor.execute(query, (price,))
             rows = cursor.fetchall()
 
-            return [self._row_to_product(row) for row in rows]
-        finally:
-            cursor.close()
-            conn.close()
+        return [self._row_to_product(row) for row in rows]
 
     def _row_to_product(self, row: Tuple[str, str, Decimal, str, int, str]) -> Product:
         return Product(

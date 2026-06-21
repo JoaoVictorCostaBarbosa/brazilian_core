@@ -1,86 +1,41 @@
-from decimal import Decimal
 from typing import Optional
-from app.models.order import Order
-from app.models.product_order import ProductOrder
+
 from app.models.user import User
 from app.repositories.cart_item_repo import CartItemRepository
+from app.repositories.coupon_repo import CouponRepository
 from app.repositories.order_repo import OrderRepository
 from app.repositories.product_order_repo import ProductOrderRepository
 from app.repositories.product_register_repo import ProductRegisterRepository
 from app.schemas.order_schema import OrderResponse, to_order_response
 from app.security.auth import get_current_user
-from fastapi import APIRouter, Depends, HTTPException
+from app.services.order_service import OrderService
+from fastapi import APIRouter, Depends
 from starlette import status
-from app.repositories.coupon_repo import CouponRepository
 
 router = APIRouter()
+
+
+def get_order_service(
+    order_repo: OrderRepository = Depends(OrderRepository),
+    product_order_repo: ProductOrderRepository = Depends(ProductOrderRepository),
+    product_register_repo: ProductRegisterRepository = Depends(ProductRegisterRepository),
+    cart_item_repo: CartItemRepository = Depends(CartItemRepository),
+    coupon_repo: CouponRepository = Depends(CouponRepository),
+) -> OrderService:
+    return OrderService(
+        order_repo=order_repo,
+        product_order_repo=product_order_repo,
+        product_register_repo=product_register_repo,
+        cart_item_repo=cart_item_repo,
+        coupon_repo=coupon_repo,
+    )
 
 
 @router.post("/", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 def purchase_from_cart(
     coupon_code: Optional[str] = None,
     current_user: User = Depends(get_current_user),
-    order_repo: OrderRepository = Depends(OrderRepository),
-    product_order_repo: ProductOrderRepository = Depends(ProductOrderRepository),
-    product_register_repo: ProductRegisterRepository = Depends(
-        ProductRegisterRepository
-    ),
-    cart_item_repo: CartItemRepository = Depends(CartItemRepository),
-    coupon_repo: CouponRepository = Depends(CouponRepository)
+    service: OrderService = Depends(get_order_service),
 ):
-    products = cart_item_repo.get_cart(current_user.id)
-
-    if not products:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Não é possivel realziar uma compra com o carrinho vazio",
-        )
-
-    if coupon_code:
-        coupon = coupon_repo.get_coupon_by_code(coupon_code)
-    
-        if not coupon:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Cupom inválido",
-            )
-    
-        order = Order(current_user.id, coupon_id=coupon.id)
-    else:
-        coupon = None
-        order = Order(current_user.id)
-
-
-    order_repo.create_order(order)
-
-    for p in products:
-        
-        if coupon:
-            factor = Decimal(1) - (Decimal(coupon.discount_percentage) / Decimal(100))
-            p.price = p.price * factor
-        
-        product_register_id = product_register_repo.create_product_register(
-            p.id, order.id
-        )
-
-        if not product_register_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Produto não encontrado"
-            )
-
-        product_order_repo.create_product_order(
-            ProductOrder(order.id, product_register_id, p.quantity)
-        )
-
-    result = order_repo.get_order_resum_by_id(order.id)
-
-    if not result:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erro ao finalizar a compra",
-        )
-
-    cart_item_repo.clear_user_cart(current_user.id)
-
+    result = service.purchase_from_cart(current_user, coupon_code)
     return to_order_response(result)
-

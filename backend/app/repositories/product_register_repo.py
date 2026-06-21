@@ -1,16 +1,12 @@
 import uuid
 
-import psycopg2
-from app.db.connection import get_connection
+from app.repositories.base import BaseRepository
 
 
-class ProductRegisterRepository:
+class ProductRegisterRepository(BaseRepository):
     def create_product_register(
         self, product_id: uuid.UUID, order_id: uuid.UUID
     ) -> uuid.UUID | None:
-        conn = get_connection()
-        cursor = conn.cursor()
-
         query = """
             INSERT INTO product_register
             (id, order_id, product_id, name, price, description, url_img)
@@ -26,27 +22,11 @@ class ProductRegisterRepository:
             WHERE p.id = %s
             RETURNING id
         """
-
-        try:
-            cursor.execute(
-                query,
-                (
-                    str(order_id),
-                    str(product_id),
-                    str(product_id),
-                ),
-            )
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query, (str(order_id), str(product_id), str(product_id)))
             row = cursor.fetchone()
-            conn.commit()
 
-            if not row:
-                return None
+        if not row:
+            return None
 
-            return uuid.UUID(row[0])
-
-        except psycopg2.Error:
-            conn.rollback()
-            raise
-        finally:
-            cursor.close()
-            conn.close()
+        return uuid.UUID(row[0])

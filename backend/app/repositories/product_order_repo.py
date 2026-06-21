@@ -1,20 +1,14 @@
-import psycopg2
-from app.db.connection import get_connection
 from app.models.product_order import ProductOrder
+from app.repositories.base import BaseRepository
 
 
-class ProductOrderRepository:
-    def create_product_order(self, product_order: ProductOrder):
-        conn = get_connection()
-        cursor = conn.cursor()
-
+class ProductOrderRepository(BaseRepository):
+    def create_product_order(self, product_order: ProductOrder) -> None:
         query = """
-            INSERT INTO product_order
-            (id, order_id, product_register_id, quantity)
+            INSERT INTO product_order (id, order_id, product_register_id, quantity)
             VALUES (%s, %s, %s, %s)
         """
-
-        try:
+        with self._get_cursor() as (conn, cursor):
             cursor.execute(
                 query,
                 (
@@ -24,11 +18,3 @@ class ProductOrderRepository:
                     product_order.quantity,
                 ),
             )
-            conn.commit()
-
-        except psycopg2.Error:
-            conn.rollback()
-            raise
-        finally:
-            cursor.close()
-            conn.close()

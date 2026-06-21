@@ -1,22 +1,17 @@
 import uuid
 
-import psycopg2
-from app.db.connection import get_connection
 from app.models.cart_item import CartItem
 from app.models.item_in_cart import ItemInCart
+from app.repositories.base import BaseRepository
 
 
-class CartItemRepository:
-    def add_cart_item(self, cart_item: CartItem):
-        conn = get_connection()
-        cursor = conn.cursor()
-
+class CartItemRepository(BaseRepository):
+    def add_cart_item(self, cart_item: CartItem) -> None:
         query = """
             INSERT INTO cart_itens (id, user_id, product_id, quantity)
             VALUES (%s, %s, %s, %s)
         """
-
-        try:
+        with self._get_cursor() as (conn, cursor):
             cursor.execute(
                 query,
                 (
@@ -26,163 +21,65 @@ class CartItemRepository:
                     str(cart_item.quantity),
                 ),
             )
-            conn.commit()
 
-        except psycopg2.Error:
-            conn.rollback()
-            raise
-        finally:
-            cursor.close()
-            conn.close()
-
-    def remove_cart_item(self, user_id: uuid.UUID, product_id: uuid.UUID):
-        conn = get_connection()
-        cursor = conn.cursor()
-
+    def remove_cart_item(self, user_id: uuid.UUID, product_id: uuid.UUID) -> None:
         query = """
             DELETE FROM cart_itens
-            WHERE user_id = %s AND product_id = %s;
+            WHERE user_id = %s AND product_id = %s
         """
-
-        try:
-            cursor.execute(
-                query,
-                (str(user_id), str(product_id)),
-            )
-            conn.commit()
-
-        except psycopg2.Error:
-            conn.rollback()
-            raise
-        finally:
-            cursor.close()
-            conn.close()
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query, (str(user_id), str(product_id)))
 
     def get_cart(self, user_id: uuid.UUID) -> list[ItemInCart]:
-        conn = get_connection()
-        cursor = conn.cursor()
-
         query = """
-            SELECT
-              p.id,
-              p.name,
-              p.price,
-              p.url_img,
-              ci.quantity
+            SELECT p.id, p.name, p.price, p.url_img, ci.quantity
             FROM cart_itens ci
             JOIN products p ON p.id = ci.product_id
-            WHERE ci.user_id = %s;
+            WHERE ci.user_id = %s
         """
-
-        try:
+        with self._get_cursor() as (conn, cursor):
             cursor.execute(query, (str(user_id),))
             rows = cursor.fetchall()
 
-            return [
-                ItemInCart(
-                    id=uuid.UUID(row[0]),
-                    name=row[1],
-                    price=row[2],
-                    quantity=row[4],
-                    url_img=row[3],
-                )
-                for row in rows
-            ]
-        finally:
-            cursor.close()
-            conn.close()
+        return [
+            ItemInCart(
+                id=uuid.UUID(row[0]),
+                name=row[1],
+                price=row[2],
+                url_img=row[3],
+                quantity=row[4],
+            )
+            for row in rows
+        ]
 
     def get_product_from_cart_by_id(
         self, user_id: uuid.UUID, product_id: uuid.UUID
     ) -> ItemInCart | None:
-        conn = get_connection()
-        cursor = conn.cursor()
-
         query = """
-            SELECT
-              p.id,
-              p.name,
-              p.price,
-              p.url_img,
-              ci.quantity
+            SELECT p.id, p.name, p.price, p.url_img, ci.quantity
             FROM cart_itens ci
             JOIN products p ON p.id = ci.product_id
-            WHERE ci.user_id = %s AND ci.product_id = %s;
+            WHERE ci.user_id = %s AND ci.product_id = %s
         """
-
-        try:
-            cursor.execute(
-                query,
-                (
-                    str(user_id),
-                    str(product_id),
-                ),
-            )
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query, (str(user_id), str(product_id)))
             row = cursor.fetchone()
 
-            if not row:
-                return None
+        if not row:
+            return None
 
-            return ItemInCart(
-                id=uuid.UUID(row[0]),
-                name=row[1],
-                price=row[2],
-                quantity=row[3],
-                url_img=row[4],
-            )
-        finally:
-            cursor.close()
-            conn.close()
+        return ItemInCart(
+            id=uuid.UUID(row[0]),
+            name=row[1],
+            price=row[2],
+            url_img=row[3],
+            quantity=row[4],
+        )
 
-    def clear_user_cart(self, user_id: uuid.UUID):
-        conn = get_connection()
-        cursor = conn.cursor()
-
+    def clear_user_cart(self, user_id: uuid.UUID) -> None:
         query = """
             DELETE FROM cart_itens
-            WHERE user_id = %s;
+            WHERE user_id = %s
         """
-
-        try:
-            cursor.execute(
-                query,
-                (str(user_id),),
-            )
-            conn.commit()
-
-        except psycopg2.Error:
-            conn.rollback()
-            raise
-        finally:
-            cursor.close()
-            conn.close()
-
-def get_cart_with_total(self, user_id: uuid.UUID):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    query = """
-        SELECT
-          p.id,
-          p.name,
-          p.price,
-          p.url_img,
-          ci.quantity,
-
-          (p.price * ci.quantity) AS item_total,
-
-          SUM(p.price * ci.quantity)
-              OVER (PARTITION BY ci.user_id) AS cart_total
-        FROM cart_itens ci
-        JOIN products p ON p.id = ci.product_id
-        WHERE ci.user_id = %s;
-    """
-
-    try:
-        cursor.execute(query, (str(user_id),))
-        rows = cursor.fetchall()
-
-        return rows  # [(id, name, price, url, qty, item_total, cart_total)]
-    finally:
-        cursor.close()
-        conn.close()
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query, (str(user_id),))
