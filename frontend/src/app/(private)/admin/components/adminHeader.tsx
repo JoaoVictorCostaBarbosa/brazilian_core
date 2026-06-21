@@ -5,7 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "../../user/context/userContext";
 
 const NAV_LINKS = [
+  { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/products", label: "Produtos" },
+  { href: "/admin/users", label: "Usuários" },
   { href: "/coupon", label: "Cupons" },
   { href: "/user", label: "Perfil" },
 ];

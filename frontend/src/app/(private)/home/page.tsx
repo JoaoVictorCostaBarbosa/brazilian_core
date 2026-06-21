@@ -5,6 +5,7 @@ import getProducts from "../../../../api/getAllProducts";
 import SubHeader from "./components/subHeader";
 import RenderParfum from "./components/renderParfum";
 import Header from "./components/header";
+import FilterPanel from "./components/filterPanel";
 import { Parfum } from "../cart/page";
 import { useUser } from "../user/context/userContext";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,7 @@ import { useRouter } from "next/navigation";
 export default function HeroSection() {
   const [parfum, setParfum] = useState<Parfum[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { currUser, getUser } = useUser();
+  const { getUser } = useUser();
   const router = useRouter();
 
   const LIMIT = 7;
@@ -42,7 +43,15 @@ export default function HeroSection() {
 
   return (
     <div>
-      <Header setParfum={setParfum} />
+      <div className="relative">
+        <Header setParfum={setParfum} />
+        <div className="absolute top-3 right-[4.5rem] z-10">
+          <FilterPanel
+            setParfum={setParfum}
+            onClear={() => getParfum(currentPage)}
+          />
+        </div>
+      </div>
       <HeroCard />
       <SubHeader />
 
