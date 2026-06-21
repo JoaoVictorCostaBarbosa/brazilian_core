@@ -77,9 +77,13 @@ class CartItemRepository(BaseRepository):
         )
 
     def clear_user_cart(self, user_id: uuid.UUID) -> None:
-        query = """
-            DELETE FROM cart_itens
-            WHERE user_id = %s
-        """
+        # Reset quantities to 1 first so the decrement trigger allows the DELETE
         with self._get_cursor() as (conn, cursor):
-            cursor.execute(query, (str(user_id),))
+            cursor.execute(
+                "UPDATE cart_itens SET quantity = 1 WHERE user_id = %s",
+                (str(user_id),),
+            )
+            cursor.execute(
+                "DELETE FROM cart_itens WHERE user_id = %s",
+                (str(user_id),),
+            )

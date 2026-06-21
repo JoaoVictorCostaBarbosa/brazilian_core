@@ -129,3 +129,46 @@ class UserRepository(BaseRepository):
         with self._get_cursor() as (conn, cursor):
             cursor.execute(query, (str(id),))
             return cursor.rowcount > 0
+
+    def list_all_users(self) -> list[User]:
+        query = """
+            SELECT id, name, email, password, role
+            FROM users
+            ORDER BY name
+        """
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query)
+            rows = cursor.fetchall()
+
+        return [
+            User(
+                id=uuid.UUID(row[0]),
+                name=row[1],
+                email=row[2],
+                password=row[3],
+                role=row[4],
+            )
+            for row in rows
+        ]
+
+    def update_user_role(self, id: uuid.UUID, role: str) -> User | None:
+        query = """
+            UPDATE users
+            SET role = %s
+            WHERE id = %s
+            RETURNING id, name, email, password, role
+        """
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query, (role, str(id)))
+            row = cursor.fetchone()
+
+        if not row:
+            return None
+
+        return User(
+            id=uuid.UUID(row[0]),
+            name=row[1],
+            email=row[2],
+            password=row[3],
+            role=row[4],
+        )

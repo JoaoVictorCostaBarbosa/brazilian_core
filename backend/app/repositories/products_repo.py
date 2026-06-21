@@ -93,6 +93,54 @@ class ProductRepository(BaseRepository):
 
         return [self._row_to_product(row) for row in rows]
 
+    def filter_products(
+        self,
+        name: str | None,
+        max_price: Decimal | None,
+        min_rating: float | None,
+        in_stock: bool,
+    ) -> list[Product]:
+        conditions = []
+        params: list = []
+
+        if name:
+            conditions.append("p.name ILIKE %s")
+            params.append(f"%{name}%")
+
+        if max_price is not None:
+            conditions.append("p.price <= %s")
+            params.append(max_price)
+
+        if in_stock:
+            conditions.append("p.stock_quantity > 0")
+
+        where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
+
+        if min_rating is not None:
+            query = f"""
+                SELECT p.id, p.name, p.price, p.description, p.stock_quantity, p.url_img
+                FROM products p
+                LEFT JOIN review r ON r.product_id = p.id
+                {where}
+                GROUP BY p.id, p.name, p.price, p.description, p.stock_quantity, p.url_img
+                HAVING COALESCE(AVG(r.rating), 0) >= %s
+                ORDER BY p.name
+            """
+            params.append(min_rating)
+        else:
+            query = f"""
+                SELECT p.id, p.name, p.price, p.description, p.stock_quantity, p.url_img
+                FROM products p
+                {where}
+                ORDER BY p.name
+            """
+
+        with self._get_cursor() as (conn, cursor):
+            cursor.execute(query, params)
+            rows = cursor.fetchall()
+
+        return [self._row_to_product(row) for row in rows]
+
     def _row_to_product(self, row: Tuple[str, str, Decimal, str, int, str]) -> Product:
         return Product(
             id=uuid.UUID(row[0]),

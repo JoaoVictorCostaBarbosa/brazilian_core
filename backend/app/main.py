@@ -4,7 +4,10 @@ from app.routers.coupon_route import router as coupon_router
 from app.routers.order_router import router as order_router
 from app.routers.products_route import router as product_router
 from app.routers.review_route import router as review_router
+from app.routers.stats_route import router as stats_router
 from app.routers.user_route import router as user_router
+from app.routers.wishlist_route import router as wishlist_router
+from app.routers.admin_users_route import router as admin_users_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
@@ -30,6 +33,9 @@ app.include_router(cart_router, prefix="/api/cart", tags=["Cart"])
 app.include_router(coupon_router, prefix="/api/coupon", tags=["Coupon"])
 app.include_router(review_router, prefix="/api/review", tags=["Review"])
 app.include_router(order_router, prefix="/api/order", tags=["Order"])
+app.include_router(stats_router, prefix="/api/admin/stats", tags=["Admin Stats"])
+app.include_router(wishlist_router, prefix="/api/wishlist", tags=["Wishlist"])
+app.include_router(admin_users_router, prefix="/api/admin/users", tags=["Admin Users"])
 
 
 @app.get("/health")

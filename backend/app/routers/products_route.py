@@ -10,10 +10,27 @@ from app.schemas.product_schema import (
     to_product_reponse,
 )
 from app.security.auth import get_current_user
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from starlette import status
 
 router = APIRouter()
+
+
+@router.get(
+    "/filter",
+    response_model=list[ProductResponse],
+    status_code=status.HTTP_200_OK,
+)
+def filter_products(
+    name: str | None = Query(default=None),
+    max_price: Decimal | None = Query(default=None),
+    min_rating: float | None = Query(default=None, ge=1, le=5),
+    in_stock: bool = Query(default=False),
+    product_repo: ProductRepository = Depends(ProductRepository),
+    _: User = Depends(get_current_user),
+):
+    products = product_repo.filter_products(name, max_price, min_rating, in_stock)
+    return [to_product_reponse(p) for p in products]
 
 
 @router.get(
