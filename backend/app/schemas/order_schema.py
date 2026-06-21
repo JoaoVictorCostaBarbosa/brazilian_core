@@ -7,6 +7,16 @@ from app.models.product_purchased import ProductPurchased
 from pydantic import BaseModel
 
 
+class OrderSummaryResponse(BaseModel):
+    order_id: uuid.UUID
+    user_id: uuid.UUID
+    coupon_id: uuid.UUID | None
+    order_purchase_at: date
+    total_products: int
+    total_items: int
+    total_value: Decimal
+
+
 class ProductPurchasedResponse(BaseModel):
     id: uuid.UUID
     name: str

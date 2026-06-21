@@ -48,7 +48,11 @@ export default function LoginCard() {
         sameSite: "lax",
       });
 
-      router.push("/home");
+      if (userInfo.user.role === "admin") {
+        router.push("/admin/products");
+      } else {
+        router.push("/home");
+      }
     } catch {
       setUser(null);
       setErrorMsg("Login não autorizado. Verifique suas credenciais.");

@@ -1,10 +1,19 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useUser } from "../../user/context/userContext";
 
 export default function Sidebar(){
       const [isOpen, setOpen] = useState(false);
-    
+      const { currUser, logout } = useUser();
+      const router = useRouter();
+
+      function handleLogout() {
+        logout();
+        router.push("/sigin");
+      }
+
     return(
         <div >
         <button
@@ -38,9 +47,13 @@ export default function Sidebar(){
           <div className="p-6 bg-teal-950">
             <nav className="flex flex-col gap-4 mt-6">
               <Link href={"/user"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Perfil</Link>
+              <Link href={"/orders"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Meus pedidos</Link>
               <Link href={"/userReview"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Ver minhas avaliações</Link>
               <Link href={"/coupon"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Ver cupons</Link>
-              <Link href={"/sigin"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Sair</Link>
+              {currUser?.role === "admin" && (
+                <Link href={"/admin/products"} className="hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Admin: produtos</Link>
+              )}
+              <button onClick={handleLogout} className="text-left hover:text-amber-400 cursor-pointer text-amber-200 hover:border-b hover:border-amber-400 transition duration-300">Sair</button>
             </nav>
           </div>
         </aside>

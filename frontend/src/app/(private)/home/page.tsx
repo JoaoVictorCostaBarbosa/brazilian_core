@@ -6,19 +6,21 @@ import SubHeader from "./components/subHeader";
 import RenderParfum from "./components/renderParfum";
 import Header from "./components/header";
 import { Parfum } from "../cart/page";
+import { useUser } from "../user/context/userContext";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
   const [parfum, setParfum] = useState<Parfum[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const { currUser, getUser } = useUser();
+  const router = useRouter();
 
   const LIMIT = 7;
-  
-  async function getParfum(page: number) {
 
+  async function getParfum(page: number) {
     try {
       const start = (page - 1) * LIMIT;
       const end = start + LIMIT - 1;
-
       const products = await getProducts(start, end);
       setParfum(products);
     } catch (error) {
@@ -26,10 +28,16 @@ export default function HeroSection() {
     }
   }
 
-  
-
   useEffect(() => {
-    getParfum(currentPage);
+    async function checkRole() {
+      const user = await getUser();
+      if (user?.role === "admin") {
+        router.replace("/admin/products");
+        return;
+      }
+      getParfum(currentPage);
+    }
+    checkRole();
   }, [currentPage]);
 
   return (

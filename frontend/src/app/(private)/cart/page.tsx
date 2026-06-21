@@ -5,6 +5,8 @@ import { useCart } from "./cartContext";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { createOrder } from "../../../../api/order";
+import { useUser } from "../user/context/userContext";
+import { useRouter } from "next/navigation";
 
 export interface Parfum {
   id: string;
@@ -26,10 +28,20 @@ export default function Cart() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const { currUser, getUser } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
-    getCurrCartItems();
-  }, [cartItems]);
+    async function checkRole() {
+      const user = await getUser();
+      if (user?.role === "admin") {
+        router.replace("/admin/products");
+        return;
+      }
+      getCurrCartItems();
+    }
+    checkRole();
+  }, []);
 
   async function finalizePurchase() {
     try {

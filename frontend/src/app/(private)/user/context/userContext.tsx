@@ -1,6 +1,7 @@
 'use client'
 
-import { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext, useState } from "react";
+import Cookies from "js-cookie";
 import { getCurrUser, updateUserPassword, updateUserEmail, updateUserName } from "../../../../../api/user";
 
 export interface UserPropsReturn {
@@ -16,6 +17,7 @@ interface UserContextProps {
   updateEmail: (email: string) => Promise<boolean>;
   updateName: (name: string) => Promise<boolean>;
   getUser: () => Promise<UserPropsReturn | undefined>;
+  logout: () => void;
 }
 
 const UserContext = createContext({} as UserContextProps);
@@ -65,6 +67,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  function logout() {
+    setCurrUser(undefined);
+    Cookies.remove("auth_token");
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -73,6 +80,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         updateEmail,
         updateName,
         getUser,
+        logout,
       }}
     >
       {children}

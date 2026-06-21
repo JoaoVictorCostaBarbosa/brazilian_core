@@ -24,6 +24,16 @@ export default function RenderParfumPage({ parfum }: TesteProps) {
 
             <span className="text-3xl font-bold text-emerald-900">R$ {parfum.price}</span>
 
+            <div>
+              {parfum.stock_quantity === 0 ? (
+                <span className="inline-block text-sm font-semibold bg-red-100 text-red-700 px-3 py-1 rounded-full">Esgotado</span>
+              ) : parfum.stock_quantity <= 5 ? (
+                <span className="inline-block text-sm font-semibold bg-amber-100 text-amber-700 px-3 py-1 rounded-full">Últimas {parfum.stock_quantity} unidades</span>
+              ) : (
+                <span className="inline-block text-sm font-semibold bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">{parfum.stock_quantity} em estoque</span>
+              )}
+            </div>
+
             <button
               onClick={() => addToCart(parfum.id)}
               className="mt-6 inline-flex items-center gap-3 bg-emerald-900 text-amber-100 px-6 py-3 rounded-xl font-semibold text-lg shadow-md shadow-emerald-900/30 hover:bg-emerald-800 hover:scale-[1.02] active:scale-95 transition-all duration-200 max-w-fit"

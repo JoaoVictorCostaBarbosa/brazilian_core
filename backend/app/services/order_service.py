@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from app.discount.strategy import get_discount_strategy
@@ -55,6 +56,13 @@ class OrderService:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="Cupom inválido",
+                )
+
+            expires = coupon.expires_at.date() if hasattr(coupon.expires_at, "date") else coupon.expires_at
+            if expires < date.today():
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="Cupom expirado",
                 )
 
         discount = get_discount_strategy(coupon)

@@ -14,6 +14,32 @@ class ProductResponse(BaseModel):
     url_img: str
 
 
+class ProductRequest(BaseModel):
+    name: str
+    price: Decimal
+    description: str
+    stock_quantity: int
+    url_img: str
+
+    def to_model(self) -> Product:
+        return Product(
+            name=self.name,
+            price=self.price,
+            description=self.description,
+            stock_quantity=self.stock_quantity,
+            url_img=self.url_img,
+            id=None,
+        )
+
+
+class ProductUpdateRequest(BaseModel):
+    name: str
+    price: Decimal
+    description: str
+    stock_quantity: int
+    url_img: str
+
+
 def to_product_reponse(data: Product) -> ProductResponse:
     return ProductResponse(
         id=data.id,

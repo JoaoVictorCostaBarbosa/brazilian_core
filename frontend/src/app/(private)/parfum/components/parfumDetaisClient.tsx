@@ -5,6 +5,8 @@ import Link from "next/link";
 import { getProductsById } from "../../../../../api/getProductById";
 import RenderParfumPage from "./renderParfumDetailsPage";
 import { Parfum } from "../../cart/page";
+import { useUser } from "../../user/context/userContext";
+import { useRouter } from "next/navigation";
 
 interface Props {
   productId: string;
@@ -14,21 +16,28 @@ export default function ParfumDetailsClient({ productId }: Props) {
   const [parfum, setParfum] = useState<Parfum | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { currUser, getUser } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
-    async function fetchParfum() {
+    async function init() {
+      const user = await getUser();
+      if (user?.role === "admin") {
+        router.replace("/admin/products");
+        return;
+      }
       try {
         setLoading(true);
         const product = await getProductsById(productId);
         setParfum(product);
-      } catch (err) {
+      } catch {
         setError("Erro ao carregar produto");
       } finally {
         setLoading(false);
       }
     }
 
-    if (productId) fetchParfum();
+    if (productId) init();
   }, [productId]);
 
   return (
